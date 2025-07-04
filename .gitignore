@@ -1,0 +1,10 @@
+.DS_Store
+
+background_images/
+checkpoints/
+test_results/
+pretrained_model/
+videos/
+/fast-neural-style-pytorch/models/
+/fast-neural-style-pytorch/transforms/
+
