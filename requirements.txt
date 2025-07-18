@@ -1,0 +1,10 @@
+torch
+numpy
+torchvision
+opencv-python
+matplotlib
+pycocotools
+Pillow
+tqdm
+requests
+importlib-metadata
