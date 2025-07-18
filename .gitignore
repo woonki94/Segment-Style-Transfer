@@ -8,3 +8,9 @@ videos/
 /fast-neural-style-pytorch/models/
 /fast-neural-style-pytorch/transforms/
 
+
+/venv
+
+__pycache__
+
+/fast-neural-style-pytorch/dataset
