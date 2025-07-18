@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 from torchvision import models, transforms
 import utils
+import os
 
 class VGG19(nn.Module):
     def __init__(self, vgg_path="models/vgg19-d01eb7cb.pth"):
@@ -26,8 +27,13 @@ class VGG19(nn.Module):
         return features
 
 class VGG16(nn.Module):
-    def __init__(self, vgg_path="models/vgg16-00b39a1b.pth"):
+    def __init__(self, vgg_path=None):
         super(VGG16, self).__init__()
+
+        if vgg_path is None:
+            base_dir = os.path.dirname(os.path.abspath(__file__))
+            vgg_path = os.path.join(base_dir, "models", "vgg16-397923af.pth")
+
         # Load VGG Skeleton, Pretrained Weights
         vgg16_features = models.vgg16(pretrained=False)
         vgg16_features.load_state_dict(torch.load(vgg_path), strict=False)

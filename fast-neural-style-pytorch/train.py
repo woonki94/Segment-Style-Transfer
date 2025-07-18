@@ -5,25 +5,31 @@ from torchvision import datasets, transforms
 import random
 import numpy as np
 import time
+import os
 
 import vgg
 import transformer
 import utils
 
+
 # GLOBAL SETTINGS
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 TRAIN_IMAGE_SIZE = 256
-DATASET_PATH = "dataset"
+DATASET_PATH = os.path.join(BASE_DIR, "dataset")
 NUM_EPOCHS = 1
-STYLE_IMAGE_PATH = "images/jojo.jpg"
-BATCH_SIZE = 4 
+STYLE_IMAGE_PATH = os.path.join(BASE_DIR, "images", "jojo.jpg")
+BATCH_SIZE = 4
 CONTENT_WEIGHT = 17 # 17
 STYLE_WEIGHT = 50 # 25
 ADAM_LR = 0.001
-SAVE_MODEL_PATH = "models/"
-SAVE_IMAGE_PATH = "images/out/"
+SAVE_MODEL_PATH = os.path.join(BASE_DIR, "models/")
+SAVE_IMAGE_PATH = os.path.join(BASE_DIR, "images", "out/")
 SAVE_MODEL_EVERY = 500 # 2,000 Images with batch size 4
 SEED = 35
 PLOT_LOSS = 1
+SAVE_FINAL_PATH = os.path.join(BASE_DIR, "transforms/")
+
 
 def train():
     # Seeds
@@ -99,7 +105,7 @@ def train():
 
             # Content Loss
             MSELoss = nn.MSELoss().to(device)
-            content_loss = CONTENT_WEIGHT * MSELoss(generated_features['relu2_2'], content_features['relu2_2'])            
+            content_loss = CONTENT_WEIGHT * MSELoss(generated_features['relu2_2'], content_features['relu2_2'])
             batch_content_loss_sum += content_loss
 
             # Style Loss
@@ -152,16 +158,17 @@ def train():
     print("Done Training the Transformer Network!")
     print("Training Time: {} seconds".format(stop_time-start_time))
     print("========Content Loss========")
-    print(content_loss_history) 
+    print(content_loss_history)
     print("========Style Loss========")
-    print(style_loss_history) 
+    print(style_loss_history)
     print("========Total Loss========")
-    print(total_loss_history) 
+    print(total_loss_history)
 
     # Save TransformerNetwork weights
     TransformerNetwork.eval()
     TransformerNetwork.cpu()
-    final_path = SAVE_MODEL_PATH + "transformer_weight.pth"
+    style_name = os.path.splitext(os.path.basename(STYLE_IMAGE_PATH))[0]
+    final_path = SAVE_FINAL_PATH + style_name + ".pth"
     print("Saving TransformerNetwork weights at {}".format(final_path))
     torch.save(TransformerNetwork.state_dict(), final_path)
     print("Done saving final model")
